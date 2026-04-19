@@ -5,7 +5,7 @@
 
 import { motion, AnimatePresence } from 'motion/react';
 import { ShoppingBag, Search, MapPin, BookOpen, X } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { cn } from './lib/utils';
 
 interface Product {
@@ -80,6 +80,20 @@ export default function App() {
   const [activeId, setActiveId] = useState<string>('rose');
   const [lang, setLang] = useState<Language>('cn');
   const [zoomedImage, setZoomedImage] = useState<string | null>(null);
+  const [heroIndex, setHeroIndex] = useState(0);
+
+  const heroImages = [
+    "https://res.cloudinary.com/dv3erhizb/image/upload/v1776581313/image_4693ebd_exj9uh.png",
+    "https://res.cloudinary.com/dv3erhizb/image/upload/v1776612307/05430654dd8fc7dacea077f936765e27_kq8r3o.png"
+  ];
+
+  // Auto-switch for Hero Section
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setHeroIndex((prev) => (prev + 1) % heroImages.length);
+    }, 6000);
+    return () => clearInterval(timer);
+  }, [heroImages.length]);
 
   const t = {
     collections: { cn: '香氛系列', en: 'Collections' },
@@ -95,6 +109,11 @@ export default function App() {
     storyText: {
       cn: '“序章”不仅仅是一个品牌，它是一种对时间的致敬。我们深入全球最隐秘的角落，寻觅那些被时光遗忘的稀有天然香材。从乌木的幽暗到玫瑰的炽烈，每一滴香精都承载着一段不曾言说的心事。',
       en: '"Prologue" is more than a brand; it is a tribute to time. We venture into the most secluded corners of the world to find rare natural ingredients forgotten by time. From the darkness of Oud to the blaze of Rose, every drop of essence carries an unspoken story.'
+    },
+    epilogue: { cn: '未完的序章', en: 'UNFINISHED CHAPTER' },
+    epilogueText: {
+      cn: '这只是记忆的开端，每一场感官的邂逅，都是独一无二的私人叙事。',
+      en: 'This is just the beginning of memory; every sensory encounter is a unique personal narrative.'
     }
   };
 
@@ -133,27 +152,80 @@ export default function App() {
         </nav>
       </header>
 
-      {/* Hero Section: Blue-Grey Fragrance Art (High Visibility) */}
+      {/* Hero Section: Panoramic Carousel */}
       <section className="relative h-[90vh] w-full overflow-hidden flex items-center justify-center bg-[#0d1117] group/hero">
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1.2 }}
-          className="absolute inset-0"
-        >
-          {/* Blue-grey aesthetic - Clear focus on glass and scent essence */}
-          <img 
-            src="https://res.cloudinary.com/dv3erhizb/image/upload/v1776581313/image_4693ebd_exj9uh.png" 
-            alt="PROLOGUE | Official Brand Visual" 
-            className="w-full h-full object-cover cursor-zoom-in transition-transform duration-[2000ms] group-hover/hero:scale-105"
-            referrerPolicy="no-referrer"
-            onClick={() => setZoomedImage("https://res.cloudinary.com/dv3erhizb/image/upload/v1776581313/image_4693ebd_exj9uh.png")}
-          />
-          {/* Layered gradients for depth and text legibility */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0d1117] via-transparent to-[#0d1117]/40 transition-opacity duration-1000 group-hover/hero:opacity-60" />
-        </motion.div>
+        <AnimatePresence>
+          <motion.div 
+            key={heroIndex}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.5, ease: "easeInOut" }}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            onDragEnd={(_, info) => {
+              if (info.offset.x < -100) {
+                setHeroIndex((prev) => (prev + 1) % heroImages.length);
+              } else if (info.offset.x > 100) {
+                setHeroIndex((prev) => (prev === 0 ? heroImages.length - 1 : prev - 1));
+              }
+            }}
+            className="absolute inset-0 cursor-grab active:cursor-grabbing"
+          >
+            <img 
+              src={heroImages[heroIndex]} 
+              alt={`PROLOGUE | Brand Visual ${heroIndex + 1}`} 
+              className="w-full h-full object-cover pointer-events-none"
+              referrerPolicy="no-referrer"
+            />
+            {/* Layered gradients for depth and text legibility */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0d1117] via-transparent to-[#0d1117]/40 pointer-events-none" />
+            <div className="absolute inset-0 bg-brand-black/20 pointer-events-none" />
+          </motion.div>
+        </AnimatePresence>
 
-        <div className="relative z-20 text-center px-6 max-w-5xl">
+        {/* Carousel Controls (Dots) - Higher Z-Index */}
+        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-50 flex gap-6">
+          {heroImages.map((_, idx) => (
+            <button 
+              key={idx}
+              onClick={(e) => {
+                e.stopPropagation();
+                setHeroIndex(idx);
+              }}
+              className={cn(
+                "w-12 h-[2px] transition-all duration-700",
+                heroIndex === idx ? "bg-brand-crimson w-20" : "bg-white/20 hover:bg-white/40"
+              )}
+            />
+          ))}
+        </div>
+
+        {/* Left/Right Manual Navigation - Higher Z-Index */}
+        <div 
+          onClick={(e) => {
+            e.stopPropagation();
+            setHeroIndex((prev) => (prev === 0 ? heroImages.length - 1 : prev - 1));
+          }}
+          className="absolute left-0 inset-y-0 w-24 z-50 cursor-pointer group/nav"
+        >
+          <div className="h-full flex items-center justify-center opacity-0 group-hover/nav:opacity-100 transition-opacity">
+            <div className="w-10 h-[1px] bg-white/40 -translate-x-4 group-hover/nav:translate-x-0 transition-transform" />
+          </div>
+        </div>
+        <div 
+          onClick={(e) => {
+            e.stopPropagation();
+            setHeroIndex((prev) => (prev + 1) % heroImages.length);
+          }}
+          className="absolute right-0 inset-y-0 w-24 z-50 cursor-pointer group/nav"
+        >
+          <div className="h-full flex items-center justify-center opacity-0 group-hover/nav:opacity-100 transition-opacity">
+            <div className="w-10 h-[1px] bg-white/40 translate-x-4 group-hover/nav:translate-x-0 transition-transform" />
+          </div>
+        </div>
+
+        <div className="relative z-20 text-center px-6 max-w-5xl pointer-events-none">
           <motion.p 
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -162,8 +234,7 @@ export default function App() {
           >
             {t.curated[lang]}
           </motion.p>
-
-          {/* Brand Identity Above Title */}
+          
           <motion.div
             initial={{ y: 30, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -189,14 +260,13 @@ export default function App() {
           
           <motion.button
             initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
+            animate={{ opacity: 1 }}
             transition={{ delay: 1, duration: 1 }}
-            viewport={{ once: true }}
             onClick={() => {
               const mainElement = document.querySelector('main');
               mainElement?.scrollIntoView({ behavior: 'smooth' });
             }}
-            className="px-14 py-6 border border-white/20 hover:border-brand-crimson hover:bg-brand-crimson text-white text-[10px] tracking-[8px] uppercase transition-all duration-700 backdrop-blur-sm"
+            className="px-14 py-6 border border-white/20 hover:border-brand-crimson hover:bg-brand-crimson text-white text-[10px] tracking-[8px] uppercase transition-all duration-700 backdrop-blur-sm pointer-events-auto"
           >
             {t.explore[lang]}
           </motion.button>
@@ -367,7 +437,7 @@ export default function App() {
       </main>
 
       {/* Brand Story Section with Full-Bleed Background */}
-      <section className="relative py-64 md:py-80 px-8 md:px-16 border-t geometric-grid-line overflow-hidden bg-brand-black">
+      <section className="relative py-32 md:py-48 px-8 md:px-16 border-t geometric-grid-line overflow-hidden bg-brand-black">
         {/* Cinematic Backdrop Image */}
         <div className="absolute inset-0 z-0">
           <img 
@@ -434,6 +504,36 @@ export default function App() {
         </div>
       </section>
 
+      {/* Visual Epilogue: Seamless Full-Bleed Artistic Conclusion */}
+      <section className="relative w-full bg-brand-black overflow-hidden border-t border-white/5 py-12 md:py-20">
+        <motion.div 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 3 }}
+          viewport={{ once: true }}
+          className="relative w-full max-w-[1000px] mx-auto group px-8"
+        >
+          {/* Layered Ambient Glows for Elite Blending */}
+          <div className="absolute inset-0 bg-brand-crimson/10 blur-[100px] pointer-events-none opacity-40" />
+          
+          {/* The Image with subtle transparency - Slightly Smaller */}
+          <img 
+            src="https://res.cloudinary.com/dv3erhizb/image/upload/v1776611066/c5e96942b790cd09a0a9ff085c86ec83_orclwy.png" 
+            alt="PROLOGUE | Final Impression" 
+            className="w-full h-auto block opacity-80 transition-all duration-[5000ms] group-hover:scale-[1.02] group-hover:opacity-100"
+            referrerPolicy="no-referrer"
+          />
+          
+          {/* Edge Softening Gradients (The "Melting" Effect) */}
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute top-0 inset-x-0 h-32 bg-gradient-to-b from-brand-black to-transparent" />
+            <div className="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-brand-black to-transparent" />
+            <div className="absolute left-0 inset-y-0 w-32 bg-gradient-to-r from-brand-black to-transparent hidden md:block" />
+            <div className="absolute right-0 inset-y-0 w-32 bg-gradient-to-l from-brand-black to-transparent hidden md:block" />
+          </div>
+        </motion.div>
+      </section>
+
       {/* Minimal Footer */}
       <footer className="h-auto py-12 lg:py-0 lg:h-[120px] px-8 md:px-16 flex flex-col lg:flex-row justify-between items-center border-t geometric-grid-line bg-brand-black/80 backdrop-blur-md text-[10px] uppercase tracking-[3px] text-brand-light font-light">
         <div className="flex gap-10 mb-8 lg:mb-0">
@@ -444,12 +544,6 @@ export default function App() {
 
         <div className="py-8 lg:py-0 opacity-20 text-[9px]">
           <p>© 2026 PROLOGUE FRAGRANCE. {t.curated[lang]}.</p>
-        </div>
-
-        <div className="flex gap-10">
-          <a href="#" className="hover:text-brand-crimson transition-colors flex items-center gap-2 opacity-50 hover:opacity-100">
-            <BookOpen className="w-3 h-3"/> {lang === 'cn' ? '小红书' : 'RED'}
-          </a>
         </div>
       </footer>
 
