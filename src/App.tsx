@@ -84,7 +84,7 @@ export default function App() {
 
   const heroImages = [
     "https://res.cloudinary.com/dv3erhizb/image/upload/v1776581313/image_4693ebd_exj9uh.png",
-    "https://res.cloudinary.com/dv3erhizb/image/upload/v1776612307/05430654dd8fc7dacea077f936765e27_kq8r3o.png"
+    "https://res.cloudinary.com/dv3erhizb/image/upload/v1776613827/30cb54cd782d361f9f5141933caa4b38_ldhe7a.jpg"
   ];
 
   // Auto-switch for Hero Section
