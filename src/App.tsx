@@ -476,11 +476,6 @@ export default function App() {
                 </div>
               </div>
             </div>
-            
-            {/* Minimal Caption */}
-            <div className="absolute -bottom-12 left-0 font-serif italic text-white/30 text-xs tracking-widest uppercase">
-              Part I. The Olfactive Beginning
-            </div>
           </motion.div>
 
           <motion.div 
