@@ -109,7 +109,7 @@ export default function App() {
           </ul>
         </nav>
 
-        <div className="text-center">
+        <div className="absolute left-1/2 -translate-x-1/2 text-center pointer-events-none lg:pointer-events-auto">
           <h1 className="font-serif text-3xl md:text-4xl tracking-[15px] text-white font-light ml-[15px]">序章</h1>
           <span className="text-[9px] tracking-[6px] uppercase text-brand-mid font-medium mt-1 block">PROLOGUE</span>
         </div>
@@ -153,23 +153,40 @@ export default function App() {
           <div className="absolute inset-0 bg-gradient-to-t from-[#0d1117] via-transparent to-[#0d1117]/40 transition-opacity duration-1000 group-hover/hero:opacity-60" />
         </motion.div>
 
-        <div className="relative z-20 text-center px-6">
+        <div className="relative z-20 text-center px-6 max-w-5xl">
           <motion.p 
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.3, duration: 0.8 }}
-            className="text-brand-mid font-mono text-[10px] tracking-[10px] uppercase mb-8"
+            className="text-brand-mid font-mono text-[9px] tracking-[10px] uppercase mb-12 opacity-60"
           >
             {t.curated[lang]}
           </motion.p>
-          <motion.h2 
+
+          {/* Brand Identity Above Title */}
+          <motion.div
             initial={{ y: 30, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.5, duration: 1.2 }}
-            className="text-white font-serif text-4xl md:text-5xl lg:text-7xl tracking-[12px] md:tracking-[20px] font-extralight mb-16 max-w-5xl mx-auto leading-tight"
+            className="mb-12"
+          >
+            <h3 className="text-white/90 font-serif text-2xl md:text-3xl tracking-[20px] md:tracking-[25px] font-light mb-2 ml-[20px] md:ml-[25px]">
+              序章
+            </h3>
+            <span className="text-brand-mid font-mono text-[9px] tracking-[12px] uppercase block ml-[12px] opacity-40">
+              PROLOGUE
+            </span>
+          </motion.div>
+
+          <motion.h2 
+            initial={{ y: 40, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.8, duration: 1.2 }}
+            className="text-white font-serif text-4xl md:text-6xl lg:text-7xl tracking-[10px] md:tracking-[18px] font-extralight mb-20 leading-[1.3] text-balance"
           >
             {t.ourStoryBegins[lang]}
           </motion.h2>
+          
           <motion.button
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -205,7 +222,7 @@ export default function App() {
               <div className="flex justify-between items-start mb-4">
                 <motion.div layout>
                   <h2 className={cn(
-                    "font-serif text-3xl md:text-4xl lg:text-5xl tracking-[4px] leading-tight transition-all duration-700",
+                    "font-serif text-2xl md:text-3xl lg:text-4xl tracking-[4px] leading-tight transition-all duration-700",
                       activeId === product.id 
                         ? (['lime', 'paper'].includes(product.id) ? "text-brand-azure" : "text-brand-crimson") 
                         : "text-white/40"
@@ -360,10 +377,10 @@ export default function App() {
             className="relative group"
           >
             <div className="absolute -inset-4 border border-brand-crimson/20 translate-x-4 translate-y-4 transition-transform group-hover:translate-x-6 group-hover:translate-y-6 duration-700" />
-            <div className="relative overflow-hidden cursor-zoom-in group shadow-2xl ring-1 ring-white/10" onClick={() => setZoomedImage("https://res.cloudinary.com/dv3erhizb/image/upload/v1776582247/a78ff223c98c2b7c1e4044bb9548164f_dwsyak.png")}>
+            <div className="relative overflow-hidden cursor-zoom-in group shadow-2xl ring-1 ring-white/10" onClick={() => setZoomedImage("https://res.cloudinary.com/dv3erhizb/image/upload/v1776601024/78f3e4167ee6ba758f37a4dfb9cba04a_eajqbh.png")}>
               <img 
-                src="https://res.cloudinary.com/dv3erhizb/image/upload/v1776582247/a78ff223c98c2b7c1e4044bb9548164f_dwsyak.png" 
-                alt="PROLOGUE | Luxury Atmosphere" 
+                src="https://res.cloudinary.com/dv3erhizb/image/upload/v1776601024/78f3e4167ee6ba758f37a4dfb9cba04a_eajqbh.png" 
+                alt="PROLOGUE | Modern Scent Art" 
                 className="w-full h-auto transition-transform duration-700 group-hover:scale-[1.03]"
                 referrerPolicy="no-referrer"
               />
