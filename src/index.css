@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Helvetica Neue", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Georgia", "Playfair Display", serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  /* Geometric Balance Palette */
+  --color-brand-black: #050505;
+  --color-brand-dark: #1A1A1A;
+  --color-brand-mid: #333333;
+  --color-brand-light: #E0E0E0;
+  --color-brand-crimson: #8B0000;
+  --color-brand-azure: #2E4C6D; /* Sophisticated Mineral Blue */
+}
+
+@layer base {
+  body {
+    @apply bg-brand-black text-brand-light antialiased selection:bg-brand-azure selection:text-white overflow-x-hidden;
+  }
+}
+
+/* Custom layout classes for Geometric Balance */
+.geometric-grid-line {
+  @apply border-brand-mid;
+}
+
+.scent-vertical-title {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+.luxury-underline-crimson {
+  @apply relative after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-0 after:bg-brand-crimson after:transition-all after:duration-300 hover:after:w-full;
+}
+
+.luxury-underline-azure {
+  @apply relative after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-0 after:bg-brand-azure after:transition-all after:duration-300 hover:after:w-full;
+}
+
+.marble-bg {
+  position: relative;
+  background-color: transparent !important;
+}
+
+.marble-bg::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background-image: url('https://images.unsplash.com/photo-1541746972996-4e0b0f43e03a?auto=format&fit=crop&q=80&w=2000');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  opacity: 0.3;
+  pointer-events: none;
+  filter: contrast(1.5) brightness(0.4) grayscale(1);
+}
+
+.marble-bg::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(circle at 50% 50%, transparent 0%, #050505 80%);
+  pointer-events: none;
+}
