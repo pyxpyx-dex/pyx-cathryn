@@ -366,30 +366,50 @@ export default function App() {
         ))}
       </main>
 
-      {/* Brand Story Section */}
-      <section className="bg-brand-dark/40 backdrop-blur-sm py-32 md:py-48 px-8 md:px-16 border-t geometric-grid-line">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+      {/* Brand Story Section with Full-Bleed Background */}
+      <section className="relative py-64 md:py-80 px-8 md:px-16 border-t geometric-grid-line overflow-hidden bg-brand-black">
+        {/* Cinematic Backdrop Image */}
+        <div className="absolute inset-0 z-0">
+          <img 
+            src="https://res.cloudinary.com/dv3erhizb/image/upload/v1776604631/image_841e372b_jhwbxe.png" 
+            alt="PROLOGUE | Brand Atmosphere" 
+            className="w-full h-full object-cover opacity-50 transition-opacity duration-1000"
+            referrerPolicy="no-referrer"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-brand-black via-brand-black/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-b from-brand-black/40 via-transparent to-brand-black/40" />
+        </div>
+
+        <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-32 items-center">
           <motion.div 
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1.2 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.5, ease: [0.19, 1, 0.22, 1] }}
             viewport={{ once: true }}
-            className="relative group"
+            className="relative"
           >
-            <div className="absolute -inset-4 border border-brand-crimson/20 translate-x-4 translate-y-4 transition-transform group-hover:translate-x-6 group-hover:translate-y-6 duration-700" />
-            <div className="relative overflow-hidden cursor-zoom-in group shadow-2xl ring-1 ring-white/10" onClick={() => setZoomedImage("https://res.cloudinary.com/dv3erhizb/image/upload/v1776601024/78f3e4167ee6ba758f37a4dfb9cba04a_eajqbh.png")}>
+            {/* Visual Frame & Decorative Elements */}
+            <div className="absolute -inset-8 border border-white/5 translate-x-2 translate-y-2 pointer-events-none" />
+            <div className="absolute top-0 right-0 w-24 h-24 border-t border-r border-brand-crimson/30 -translate-y-4 translate-x-4 pointer-events-none" />
+            
+            <div className="relative overflow-hidden cursor-zoom-in group shadow-[0_50px_100px_-20px_rgba(0,0,0,0.8)] ring-1 ring-white/10" onClick={() => setZoomedImage("https://res.cloudinary.com/dv3erhizb/image/upload/v1776601024/78f3e4167ee6ba758f37a4dfb9cba04a_eajqbh.png")}>
+              {/* Full Image Display: No cropping, natural proportions */}
               <img 
                 src="https://res.cloudinary.com/dv3erhizb/image/upload/v1776601024/78f3e4167ee6ba758f37a4dfb9cba04a_eajqbh.png" 
-                alt="PROLOGUE | Modern Scent Art" 
-                className="w-full h-auto transition-transform duration-700 group-hover:scale-[1.03]"
+                alt="PROLOGUE | Luxury Detail" 
+                className="w-full h-auto transition-transform duration-1000 group-hover:scale-105"
                 referrerPolicy="no-referrer"
               />
-              {/* Dynamic Reveal Label */}
               <div className="absolute inset-0 bg-brand-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700 flex items-center justify-center">
-                <div className="border border-white/40 px-8 py-3 backdrop-blur-md translate-y-4 group-hover:translate-y-0 transition-transform duration-700">
-                  <span className="text-[10px] tracking-[6px] text-white uppercase font-sans">{t.book[lang]}</span>
+                <div className="border border-white/20 px-10 py-3 backdrop-blur-xl translate-y-6 group-hover:translate-y-0 transition-transform duration-700">
+                  <span className="text-[10px] tracking-[8px] text-white uppercase font-sans">Enlarge</span>
                 </div>
               </div>
+            </div>
+            
+            {/* Minimal Caption */}
+            <div className="absolute -bottom-12 left-0 font-serif italic text-white/30 text-xs tracking-widest uppercase">
+              Part I. The Olfactive Beginning
             </div>
           </motion.div>
 
