@@ -79,7 +79,6 @@ type Language = 'cn' | 'en';
 export default function App() {
   const [activeId, setActiveId] = useState<string>('rose');
   const [lang, setLang] = useState<Language>('cn');
-  const [zoomedImage, setZoomedImage] = useState<string | null>(null);
   const [heroIndex, setHeroIndex] = useState(0);
 
   const heroImages = [
@@ -274,19 +273,30 @@ export default function App() {
       </section>
 
       {/* Main Grid Viewport */}
-      <main className="flex-1 flex flex-col lg:flex-row overflow-hidden min-h-[calc(100vh-220px)] bg-transparent">
+      <main className="flex-1 flex flex-row lg:flex-row overflow-x-auto lg:overflow-hidden snap-x snap-mandatory no-scrollbar min-h-[calc(100vh-220px)] bg-transparent">
         {PRODUCTS.map((product) => (
           <motion.div
             key={product.id}
             layout
             onMouseEnter={() => setActiveId(product.id)}
             onClick={() => setActiveId(product.id)}
+            onViewportEnter={() => {
+              if (window.innerWidth < 1024) setActiveId(product.id);
+            }}
+            viewport={{ amount: 0.5 }}
             className={cn(
               "relative flex flex-col justify-between border-b lg:border-b-0 lg:border-r geometric-grid-line overflow-hidden cursor-pointer p-6 lg:p-12 transition-all duration-500",
               activeId === product.id ? "lg:flex-[1.4] bg-brand-dark/40" : "lg:flex-1 bg-transparent",
+              "w-screen lg:w-auto shrink-0 snap-center",
               product.id === 'paper' && "lg:border-r-0"
             )}
           >
+            {/* Mobile Interaction Hint */}
+            {product.id === 'oud' && (
+              <div className="lg:hidden absolute top-4 left-1/2 -translate-x-1/2 z-40">
+                <span className="text-[8px] tracking-[6px] text-brand-mid uppercase animate-pulse">Swipe to explore</span>
+              </div>
+            )}
             {/* Scent Title (Top Layout) */}
             <div className="z-20">
               <div className="flex justify-between items-start mb-4">
@@ -332,22 +342,19 @@ export default function App() {
                 
                 <div className={cn(
                   "relative overflow-hidden bg-white/5 backdrop-blur-sm shadow-[0_45px_100px_-20px_rgba(0,0,0,0.7)] transition-all duration-500 p-2 md:p-3 ring-1 ring-white/10",
-                  activeId === product.id ? "w-[32vw] min-w-[340px] max-w-[520px] aspect-[4/5]" : "w-52 lg:w-60 aspect-[3/4]"
+                  activeId === product.id 
+                    ? "w-[65vw] md:w-[32vw] min-w-[260px] md:min-w-[340px] max-w-[520px] aspect-[4/5]" 
+                    : "w-40 md:w-52 lg:w-60 aspect-[3/4]"
                 )}>
                   <div className="relative w-full h-full overflow-hidden">
                     <img 
                       src={product.image} 
                       alt={`${product.name[lang]} | 序章`} 
                       className={cn(
-                        "w-full h-full object-cover transition-all duration-[3000ms] group-hover:scale-110 cursor-zoom-in",
+                        "w-full h-full object-cover transition-all duration-[3000ms] group-hover:scale-110",
                         activeId === product.id ? "saturate-100 brightness-100" : "saturate-0 brightness-75 opacity-40"
                       )}
                       referrerPolicy="no-referrer"
-                      onClick={(e) => {
-                        if (activeId === product.id) {
-                          setZoomedImage(product.image);
-                        }
-                      }}
                       onError={(e) => {
                         const img = e.currentTarget;
                         if (img.src !== product.fallback) {
@@ -462,7 +469,7 @@ export default function App() {
             <div className="absolute -inset-8 border border-white/5 translate-x-2 translate-y-2 pointer-events-none" />
             <div className="absolute top-0 right-0 w-24 h-24 border-t border-r border-brand-crimson/30 -translate-y-4 translate-x-4 pointer-events-none" />
             
-            <div className="relative overflow-hidden cursor-zoom-in group shadow-[0_50px_100px_-20px_rgba(0,0,0,0.8)] ring-1 ring-white/10" onClick={() => setZoomedImage("https://res.cloudinary.com/dv3erhizb/image/upload/v1776601024/78f3e4167ee6ba758f37a4dfb9cba04a_eajqbh.png")}>
+            <div className="relative overflow-hidden group shadow-[0_50px_100px_-20px_rgba(0,0,0,0.8)] ring-1 ring-white/10">
               {/* Full Image Display: No cropping, natural proportions */}
               <img 
                 src="https://res.cloudinary.com/dv3erhizb/image/upload/v1776601024/78f3e4167ee6ba758f37a4dfb9cba04a_eajqbh.png" 
@@ -470,11 +477,6 @@ export default function App() {
                 className="w-full h-auto transition-transform duration-1000 group-hover:scale-105"
                 referrerPolicy="no-referrer"
               />
-              <div className="absolute inset-0 bg-brand-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700 flex items-center justify-center">
-                <div className="border border-white/20 px-10 py-3 backdrop-blur-xl translate-y-6 group-hover:translate-y-0 transition-transform duration-700">
-                  <span className="text-[10px] tracking-[8px] text-white uppercase font-sans">Enlarge</span>
-                </div>
-              </div>
             </div>
           </motion.div>
 
@@ -541,43 +543,6 @@ export default function App() {
           <p>© 2026 PROLOGUE FRAGRANCE. {t.curated[lang]}.</p>
         </div>
       </footer>
-
-      {/* Luxury Image Zoom Modal */}
-      <AnimatePresence>
-        {zoomedImage && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-brand-black/95 backdrop-blur-xl p-4 md:p-12"
-            onClick={() => setZoomedImage(null)}
-          >
-            <motion.button
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              className="absolute top-8 right-8 text-white hover:text-brand-crimson transition-colors z-[110]"
-              onClick={(e) => {
-                e.stopPropagation();
-                setZoomedImage(null);
-              }}
-            >
-              <X className="w-10 h-10 stroke-1" />
-            </motion.button>
-            <motion.img
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              src={zoomedImage}
-              alt="Zoomed"
-              className="max-w-full max-h-full object-contain shadow-2xl ring-1 ring-white/10"
-              referrerPolicy="no-referrer"
-              onClick={(e) => e.stopPropagation()}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }

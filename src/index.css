@@ -39,6 +39,17 @@
   @apply relative after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-0 after:bg-brand-azure after:transition-all after:duration-300 hover:after:w-full;
 }
 
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
 .marble-bg {
   position: relative;
   background-color: transparent !important;
