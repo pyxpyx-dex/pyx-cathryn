@@ -273,7 +273,7 @@ export default function App() {
       </section>
 
       {/* Main Grid Viewport */}
-      <main className="flex-1 flex flex-row lg:flex-row overflow-x-auto lg:overflow-hidden snap-x snap-mandatory no-scrollbar min-h-[calc(100vh-220px)] bg-transparent">
+      <main className="flex-1 flex flex-col lg:flex-row lg:overflow-hidden min-h-[calc(100vh-220px)] bg-transparent">
         {PRODUCTS.map((product) => (
           <motion.div
             key={product.id}
@@ -287,16 +287,9 @@ export default function App() {
             className={cn(
               "relative flex flex-col justify-between border-b lg:border-b-0 lg:border-r geometric-grid-line overflow-hidden cursor-pointer p-6 lg:p-12 transition-all duration-500",
               activeId === product.id ? "lg:flex-[1.4] bg-brand-dark/40" : "lg:flex-1 bg-transparent",
-              "w-screen lg:w-auto shrink-0 snap-center",
               product.id === 'paper' && "lg:border-r-0"
             )}
           >
-            {/* Mobile Interaction Hint */}
-            {product.id === 'oud' && (
-              <div className="lg:hidden absolute top-4 left-1/2 -translate-x-1/2 z-40">
-                <span className="text-[8px] tracking-[6px] text-brand-mid uppercase animate-pulse">Swipe to explore</span>
-              </div>
-            )}
             {/* Scent Title (Top Layout) */}
             <div className="z-20">
               <div className="flex justify-between items-start mb-4">
