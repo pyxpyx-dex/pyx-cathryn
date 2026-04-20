@@ -80,6 +80,7 @@ export default function App() {
   const [activeId, setActiveId] = useState<string>('rose');
   const [lang, setLang] = useState<Language>('cn');
   const [heroIndex, setHeroIndex] = useState(0);
+  const [showComingSoon, setShowComingSoon] = useState(false);
 
   const heroImages = [
     "https://res.cloudinary.com/dv3erhizb/image/upload/v1776581313/image_4693ebd_exj9uh.png",
@@ -104,6 +105,9 @@ export default function App() {
     ourStoryBegins: { cn: '我们的故事从这里开始', en: 'Our story begins here' },
     explore: { cn: '探索系列', en: 'Explore Collections' },
     brandPhilosophy: { cn: '品牌理念', en: 'PHILOSOPHY' },
+    comingSoon: { cn: '敬请期待', en: 'COMING SOON' },
+    comingSoonDesc: { cn: '由于品牌升级中，此功能暂未开放。', en: 'This feature is currently unavailable due to brand upgrading.' },
+    close: { cn: '关闭', en: 'CLOSE' },
     storyTitle: { cn: '用气味续写记忆的篇章', en: 'Writing Chapters of Memory with Scent' },
     storyText: {
       cn: '“序章”不仅仅是一个品牌，它是一种对时间的致敬。我们深入全球最隐秘的角落，寻觅那些被时光遗忘的稀有天然香材。从乌木的幽暗到玫瑰的炽烈，每一滴香精都承载着一段不曾言说的心事。',
@@ -122,8 +126,8 @@ export default function App() {
       <header className="h-[120px] px-8 md:px-16 flex justify-between items-center border-b geometric-grid-line bg-brand-black/90 backdrop-blur-md z-50">
         <nav className="hidden lg:block">
           <ul className="flex gap-12 text-[11px] uppercase tracking-[3px] font-medium">
-            <li><a href="#" className="luxury-underline-crimson transition-colors hover:text-brand-crimson">{t.collections[lang]}</a></li>
-            <li><a href="#" className="luxury-underline-crimson transition-colors hover:text-brand-crimson">{t.gifts[lang]}</a></li>
+            <li><button onClick={() => setShowComingSoon(true)} className="luxury-underline-crimson transition-colors hover:text-brand-crimson">{t.collections[lang]}</button></li>
+            <li><button onClick={() => setShowComingSoon(true)} className="luxury-underline-crimson transition-colors hover:text-brand-crimson">{t.gifts[lang]}</button></li>
           </ul>
         </nav>
 
@@ -134,8 +138,8 @@ export default function App() {
 
         <nav className="flex items-center gap-12">
           <ul className="hidden lg:flex gap-12 text-[11px] uppercase tracking-[3px] font-medium">
-            <li><a href="#" className="luxury-underline-crimson transition-colors hover:text-brand-crimson flex items-center gap-2"><BookOpen className="w-3 h-3"/> {t.stories[lang]}</a></li>
-            <li><a href="#" className="luxury-underline-crimson transition-colors hover:text-brand-crimson flex items-center gap-2"><MapPin className="w-3 h-3"/> {t.boutiques[lang]}</a></li>
+            <li><button onClick={() => setShowComingSoon(true)} className="luxury-underline-crimson transition-colors hover:text-brand-crimson flex items-center gap-2"><BookOpen className="w-3 h-3"/> {t.stories[lang]}</button></li>
+            <li><button onClick={() => setShowComingSoon(true)} className="luxury-underline-crimson transition-colors hover:text-brand-crimson flex items-center gap-2"><MapPin className="w-3 h-3"/> {t.boutiques[lang]}</button></li>
           </ul>
           <div className="flex items-center gap-6">
             {/* Language Switcher */}
@@ -145,8 +149,8 @@ export default function App() {
             >
               {lang === 'cn' ? 'EN' : '中'}
             </button>
-            <button className="p-2 hover:text-brand-crimson transition-colors"><Search className="w-5 h-5"/></button>
-            <button className="p-2 hover:text-brand-crimson transition-colors"><ShoppingBag className="w-5 h-5"/></button>
+            <button onClick={() => setShowComingSoon(true)} className="p-2 hover:text-brand-crimson transition-colors"><Search className="w-5 h-5"/></button>
+            <button onClick={() => setShowComingSoon(true)} className="p-2 hover:text-brand-crimson transition-colors"><ShoppingBag className="w-5 h-5"/></button>
           </div>
         </nav>
       </header>
@@ -403,12 +407,15 @@ export default function App() {
                   animate={{ opacity: activeId === product.id ? 1 : 0, y: activeId === product.id ? 0 : 20 }}
                   className="mt-10 flex items-center gap-6 group/btn"
                 >
-                  <button className={cn(
-                    "px-10 py-4 border text-[11px] tracking-[5px] uppercase font-bold transition-all duration-500 shadow-lg",
-                    ['lime', 'paper'].includes(product.id) 
-                      ? "border-brand-azure bg-brand-azure/5 text-brand-azure hover:bg-brand-azure hover:text-white shadow-brand-azure/10" 
-                      : "border-brand-crimson bg-brand-crimson/5 text-brand-crimson hover:bg-brand-crimson hover:text-white shadow-brand-crimson/10"
-                  )}>
+                  <button 
+                    onClick={() => setShowComingSoon(true)}
+                    className={cn(
+                      "px-10 py-4 border text-[11px] tracking-[5px] uppercase font-bold transition-all duration-500 shadow-lg",
+                      ['lime', 'paper'].includes(product.id) 
+                        ? "border-brand-azure bg-brand-azure/5 text-brand-azure hover:bg-brand-azure hover:text-white shadow-brand-azure/10" 
+                        : "border-brand-crimson bg-brand-crimson/5 text-brand-crimson hover:bg-brand-crimson hover:text-white shadow-brand-crimson/10"
+                    )}
+                  >
                     {t.book[lang]}
                   </button>
                   <div className={cn(
@@ -526,16 +533,66 @@ export default function App() {
 
       {/* Minimal Footer */}
       <footer className="h-auto py-12 lg:py-0 lg:h-[120px] px-8 md:px-16 flex flex-col lg:flex-row justify-between items-center border-t geometric-grid-line bg-brand-black/80 backdrop-blur-md text-[10px] uppercase tracking-[3px] text-brand-light font-light">
-        <div className="flex gap-10 mb-8 lg:mb-0">
-          <a href="#" className="hover:text-brand-crimson transition-colors opacity-50 hover:opacity-100">Terms</a>
-          <a href="#" className="hover:text-brand-crimson transition-colors opacity-50 hover:opacity-100">Privacy</a>
-          <a href="#" className="hover:text-brand-crimson transition-colors opacity-50 hover:opacity-100">Contact</a>
+        <div className="flex gap-10 mb-8 lg:mb-0 text-brand-mid">
+          <button onClick={() => setShowComingSoon(true)} className="hover:text-brand-crimson transition-colors opacity-50 hover:opacity-100">Terms</button>
+          <button onClick={() => setShowComingSoon(true)} className="hover:text-brand-crimson transition-colors opacity-50 hover:opacity-100">Privacy</button>
+          <button onClick={() => setShowComingSoon(true)} className="hover:text-brand-crimson transition-colors opacity-50 hover:opacity-100">Contact</button>
         </div>
 
         <div className="py-8 lg:py-0 opacity-20 text-[9px]">
           <p>© 2026 PROLOGUE FRAGRANCE. {t.curated[lang]}.</p>
         </div>
       </footer>
+
+      {/* Coming Soon Modal */}
+      <AnimatePresence>
+        {showComingSoon && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-6"
+          >
+            <div 
+              className="absolute inset-0 bg-brand-black/80 backdrop-blur-md" 
+              onClick={() => setShowComingSoon(false)}
+            />
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              className="relative w-full max-w-md bg-brand-dark border border-white/10 p-12 text-center"
+            >
+              <button 
+                onClick={() => setShowComingSoon(false)}
+                className="absolute top-4 right-4 text-brand-mid hover:text-white transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="mb-8 flex justify-center">
+                <div className="w-16 h-16 border border-brand-crimson/30 rounded-full flex items-center justify-center">
+                  <div className="w-2 h-2 bg-brand-crimson animate-pulse" />
+                </div>
+              </div>
+
+              <h2 className="font-serif text-2xl tracking-[10px] text-white uppercase mb-4 ml-[10px]">
+                {t.comingSoon[lang]}
+              </h2>
+              <p className="text-brand-mid text-xs tracking-[2px] leading-relaxed mb-10 font-light">
+                {t.comingSoonDesc[lang]}
+              </p>
+
+              <button
+                onClick={() => setShowComingSoon(false)}
+                className="w-full py-4 border border-white/20 text-[10px] tracking-[4px] uppercase hover:bg-white hover:text-brand-black transition-all duration-500"
+              >
+                {t.close[lang]}
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
